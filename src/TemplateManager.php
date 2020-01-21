@@ -21,10 +21,6 @@ class TemplateManager
      */
     public function getTemplateComputed(Template $tpl, array $data)
     {
-        if (!$tpl) {
-            throw new RuntimeException('no tpl given');
-        }
-
         $replaced = clone($tpl);
         $replaced->setSubject($this->computeText($replaced->getSubject(), $data));
         $replaced->setContent($this->computeText($replaced->getContent(), $data));
