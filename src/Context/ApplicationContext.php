@@ -14,11 +14,11 @@ class ApplicationContext
     /**
      * @var Site
      */
-    private $currentSite;
+    private Site $currentSite;
     /**
      * @var User
      */
-    private $currentUser;
+    private User $currentUser;
 
     protected function __construct()
     {
