@@ -15,7 +15,7 @@ class QuoteRepository implements Repository
      *
      * @return Quote
      */
-    public function getById($id)
+    public function getById(int $id)
     {
         $generator = Factory::create();
         $generator->seed($id);
