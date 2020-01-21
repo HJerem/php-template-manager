@@ -86,9 +86,9 @@ class Quote
     }
 
     /**
-     * @param string $dateQuoted
+     * @param DateTime $dateQuoted
      */
-    public function setDateQuoted(string $dateQuoted): void
+    public function setDateQuoted(DateTime $dateQuoted): void
     {
         $this->dateQuoted = $dateQuoted;
     }
