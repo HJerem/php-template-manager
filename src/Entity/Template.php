@@ -62,5 +62,4 @@ class Template
     {
         $this->content = $content;
     }
-
 }

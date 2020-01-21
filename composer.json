@@ -16,6 +16,6 @@
   "scripts": {
     "test": "./vendor/bin/phpunit --bootstrap vendor/autoload.php tests",
     "example": "php example/example.php",
-    "cs:autofix": "./vendor/bin/phpcbf ."
+    "cs:autofix": "./vendor/bin/phpcbf ./src --standard=PSR12"
   }
 }

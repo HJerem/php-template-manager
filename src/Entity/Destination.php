@@ -9,7 +9,7 @@ class Destination
     private string $conjunction;
     private string $computerName;
 
-    public function __construct(int $id,string $countryName,string $conjunction,string $computerName)
+    public function __construct(int $id, string $countryName, string $conjunction, string $computerName)
     {
         $this->id = $id;
         $this->countryName = $countryName;
@@ -80,5 +80,4 @@ class Destination
     {
         $this->computerName = $computerName;
     }
-
 }

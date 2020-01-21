@@ -15,8 +15,9 @@ class TemplateManager
     /**
      * Take a template and array of data and return a template with content and subject
      * where variables have been replaced with actual content
-     * @param Template $tpl
-     * @param array $data
+     *
+     * @param  Template $tpl
+     * @param  array    $data
      * @return Template
      */
     public function getTemplateComputed(Template $tpl, array $data)
@@ -30,8 +31,9 @@ class TemplateManager
 
     /**
      * Replace variables in a text by values based on $data array content
-     * @param string $text
-     * @param array $data
+     *
+     * @param  string $text
+     * @param  array  $data
      * @return string|string[]
      */
     private function computeText(string $text, array $data)
@@ -57,9 +59,11 @@ class TemplateManager
                 $this->searchAndReplace('[quote:summary]', Quote::renderText($quote), $text);
             }
 
-            $this->searchAndReplace('[quote:destination_link]',
+            $this->searchAndReplace(
+                '[quote:destination_link]',
                 $site->getUrl() . '/' . $destination->getCountryName() . '/quote/' . $quote->getId(),
-                $text);
+                $text
+            );
             $this->searchAndReplace('[quote:destination_name]', $destination->getCountryName(), $text);
 
             if ($user) {
@@ -72,9 +76,10 @@ class TemplateManager
 
     /**
      * Search a $needle and replace with $replace in a $text passed as reference
-     * @param string $needle
-     * @param string $replace
-     * @param string $text
+     *
+     * @param  string $needle
+     * @param  string $replace
+     * @param  string $text
      * @return string|string[]
      */
     private function searchAndReplace(string $needle, string $replace, string &$text)

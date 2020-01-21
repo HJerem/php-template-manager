@@ -7,7 +7,7 @@ class Site
     private int $id;
     private string $url;
 
-    public function __construct(int $id,string $url)
+    public function __construct(int $id, string $url)
     {
         $this->id = $id;
         $this->url = $url;
@@ -44,5 +44,4 @@ class Site
     {
         $this->url = $url;
     }
-
 }

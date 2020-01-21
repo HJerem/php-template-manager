@@ -92,5 +92,4 @@ class Quote
     {
         $this->dateQuoted = $dateQuoted;
     }
-
 }
