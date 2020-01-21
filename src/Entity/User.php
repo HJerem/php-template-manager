@@ -38,7 +38,7 @@ class User
      */
     public function getFirstname(): string
     {
-        return $this->firstname;
+        return ucfirst(mb_strtolower($this->firstname));
     }
 
     /**
