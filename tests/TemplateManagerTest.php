@@ -211,4 +211,14 @@ L'équipe Evaneos.com
 www.evaneos.com
 ", $message->getContent());
     }
+
+    /**
+     * Test without template
+     * @test
+     */
+    public function testWithoutTemplate() {
+        $templateManager = new TemplateManager();
+        $this->expectException(TypeError::class);
+        $templateManager->getTemplateComputed(null, []);
+    }
 }
