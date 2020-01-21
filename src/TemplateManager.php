@@ -12,6 +12,13 @@ use RuntimeException;
 
 class TemplateManager
 {
+    /**
+     * Take a template and array of data and return a template with content and subject
+     * where variables have been replaced with actual content
+     * @param Template $tpl
+     * @param array $data
+     * @return Template
+     */
     public function getTemplateComputed(Template $tpl, array $data)
     {
         if (!$tpl) {
@@ -25,7 +32,13 @@ class TemplateManager
         return $replaced;
     }
 
-    private function computeText($text, array $data)
+    /**
+     * Replace variables in a text by values based on $data array content
+     * @param string $text
+     * @param array $data
+     * @return string|string[]
+     */
+    private function computeText(string $text, array $data)
     {
         $applicationContext = ApplicationContext::getInstance();
 
@@ -34,40 +47,43 @@ class TemplateManager
             $site = SiteRepository::getInstance()->getById($quote->getSiteId());
             $destination = DestinationRepository::getInstance()->getById($quote->getDestinationId());
 
-            if(isset($data['user']) && $data['user'] instanceof User) {
+            // get passed user or get current user
+            if (isset($data['user']) && $data['user'] instanceof User) {
                 $user = $data['user'];
             } else {
                 $user = $applicationContext->getCurrentUser();
             }
 
             if (strpos($text, '[quote:summary_html]')) {
-                $text = str_replace(
-                    '[quote:summary_html]',
-                    Quote::renderHtml($quote),
-                    $text
-                );
+                $this->searchAndReplace('[quote:summary_html]', Quote::renderHtml($quote), $text);
             }
             if (strpos($text, '[quote:summary]')) {
-                $text = str_replace(
-                    '[quote:summary]',
-                    Quote::renderText($quote),
-                    $text
-                );
+                $this->searchAndReplace('[quote:summary]', Quote::renderText($quote), $text);
             }
 
-            (strpos($text, '[quote:destination_name]') !== false) and $text = str_replace('[quote:destination_name]', $destination->getCountryName(), $text);
-
-
-            if (isset($destination))
-                $text = str_replace('[quote:destination_link]', $site->getUrl() . '/' . $destination->getCountryName() . '/quote/' . $quote->getId(), $text);
-            else
-                $text = str_replace('[quote:destination_link]', '', $text);
+            $this->searchAndReplace('[quote:destination_link]',
+                $site->getUrl() . '/' . $destination->getCountryName() . '/quote/' . $quote->getId(),
+                $text);
+            $this->searchAndReplace('[quote:destination_name]', $destination->getCountryName(), $text);
 
             if ($user) {
-                (strpos($text, '[user:first_name]') !== false) and $text = str_replace('[user:first_name]', ucfirst(mb_strtolower($_user->getFirstname())), $text);
+                $this->searchAndReplace('[user:first_name]', $user->getFirstname(), $text);
             }
         }
 
+        return $text;
+    }
+
+    /**
+     * Search a $needle and replace with $replace in a $text passed as reference
+     * @param string $needle
+     * @param string $replace
+     * @param string $text
+     * @return string|string[]
+     */
+    private function searchAndReplace(string $needle, string $replace, string &$text)
+    {
+        $text = str_replace($needle, $replace, $text);
         return $text;
     }
 }
