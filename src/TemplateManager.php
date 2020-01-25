@@ -5,6 +5,7 @@ namespace Manager;
 use Context\ApplicationContext;
 use Entity\Quote;
 use Entity\User;
+use Helper\TextHelper;
 use Repository\DestinationRepository;
 use Entity\Template;
 use Repository\SiteRepository;
@@ -53,38 +54,24 @@ class TemplateManager
             }
 
             if (strpos($text, '[quote:summary_html]')) {
-                $this->searchAndReplace('[quote:summary_html]', Quote::renderHtml($quote), $text);
+                $text = TextHelper::searchAndReplace('[quote:summary_html]', Quote::renderHtml($quote), $text);
             }
             if (strpos($text, '[quote:summary]')) {
-                $this->searchAndReplace('[quote:summary]', Quote::renderText($quote), $text);
+                $text = TextHelper::searchAndReplace('[quote:summary]', Quote::renderText($quote), $text);
             }
 
-            $this->searchAndReplace(
+            $text = TextHelper::searchAndReplace(
                 '[quote:destination_link]',
                 $site->getUrl() . '/' . $destination->getCountryName() . '/quote/' . $quote->getId(),
                 $text
             );
-            $this->searchAndReplace('[quote:destination_name]', $destination->getCountryName(), $text);
+            $text = TextHelper::searchAndReplace('[quote:destination_name]', $destination->getCountryName(), $text);
 
             if ($user) {
-                $this->searchAndReplace('[user:first_name]', $user->getFirstname(), $text);
+                $text = TextHelper::searchAndReplace('[user:first_name]', $user->getFirstname(), $text);
             }
         }
 
-        return $text;
-    }
-
-    /**
-     * Search a $needle and replace with $replace in a $text passed as reference
-     *
-     * @param  string $needle
-     * @param  string $replace
-     * @param  string $text
-     * @return string|string[]
-     */
-    private function searchAndReplace(string $needle, string $replace, string &$text)
-    {
-        $text = str_replace($needle, $replace, $text);
         return $text;
     }
 }
