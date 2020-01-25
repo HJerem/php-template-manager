@@ -39,7 +39,6 @@ class TemplateManager
      */
     private function computeText(string $text, array $data)
     {
-        $applicationContext = ApplicationContext::getInstance();
 
         if (isset($data['quote']) && $data['quote'] instanceof Quote) {
             $quote = $data['quote'];
@@ -50,6 +49,7 @@ class TemplateManager
             if (isset($data['user']) && $data['user'] instanceof User) {
                 $user = $data['user'];
             } else {
+                $applicationContext = ApplicationContext::getInstance();
                 $user = $applicationContext->getCurrentUser();
             }
 
