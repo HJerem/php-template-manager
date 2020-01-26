@@ -19,14 +19,12 @@ class Quote
         $this->dateQuoted = $dateQuoted;
     }
 
-    public static function renderHtml(Quote $quote)
-    {
-        return '<p>' . $quote->id . '</p>';
+    public function getIdHtml() {
+        return '<p>' . $this->id . '</p>';
     }
 
-    public static function renderText(Quote $quote)
-    {
-        return (string) $quote->id;
+    public function getIdString() {
+        return (string) $this->id;
     }
 
     /**
