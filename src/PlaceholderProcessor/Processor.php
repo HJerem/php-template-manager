@@ -12,8 +12,9 @@ class Processor
         $this->processors[] = new UserProcessor();
     }
 
-    public function process(string $text, array $data) {
-        foreach($this->processors as $processor) {
+    public function process(string $text, array $data)
+    {
+        foreach ($this->processors as $processor) {
             $text = $processor->replacePlaceholders($text, $data);
         }
         return $text;

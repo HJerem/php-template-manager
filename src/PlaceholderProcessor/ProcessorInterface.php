@@ -2,6 +2,7 @@
 
 namespace PlaceholderProcessor;
 
-interface ProcessorInterface {
+interface ProcessorInterface
+{
     public function replacePlaceholders(string $text, array $data);
 }

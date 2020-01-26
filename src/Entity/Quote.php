@@ -19,11 +19,13 @@ class Quote
         $this->dateQuoted = $dateQuoted;
     }
 
-    public function getIdHtml() {
+    public function getIdHtml()
+    {
         return '<p>' . $this->id . '</p>';
     }
 
-    public function getIdString() {
+    public function getIdString()
+    {
         return (string) $this->id;
     }
 

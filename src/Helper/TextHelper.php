@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Helper;
-
 
 class TextHelper
 {
@@ -25,7 +23,8 @@ class TextHelper
      * @param string $text text to search in
      * @return bool true if $needle is present, false otherwise
      */
-    public static function doesContain(string $needle, string $text) {
+    public static function doesContain(string $needle, string $text)
+    {
         return strpos($text, $needle) !== false;
     }
 }

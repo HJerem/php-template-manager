@@ -25,27 +25,28 @@ class QuoteProcessor implements ProcessorInterface
 
     public function replacePlaceholders(string $text, array $data)
     {
-        if(isset($data['quote']) && $data['quote'] instanceof Quote) {
+        if (isset($data['quote']) && $data['quote'] instanceof Quote) {
             return $this->getTextWithValues($text, $data['quote']);
         }
 
         return $text;
     }
 
-    protected function getTextWithValues(string $text, Quote $quote) {
+    protected function getTextWithValues(string $text, Quote $quote)
+    {
         $site = $this->siteRepository->getById($quote->getSiteId());
         $destination = $this->destinationRepository->getById($quote->getDestinationId());
 
-        if(TextHelper::doesContain(self::QUOTE_SUMMARY_HTML, $text)) {
+        if (TextHelper::doesContain(self::QUOTE_SUMMARY_HTML, $text)) {
             $text = TextHelper::searchAndReplace(self::QUOTE_SUMMARY_HTML, $quote->getIdHtml(), $text);
         }
-        if(TextHelper::doesContain(self::QUOTE_SUMMARY, $text)) {
+        if (TextHelper::doesContain(self::QUOTE_SUMMARY, $text)) {
             $text = TextHelper::searchAndReplace(self::QUOTE_SUMMARY, $quote->getIdString(), $text);
         }
-        if(TextHelper::doesContain(self::QUOTE_DESTINATION_NAME, $text)) {
+        if (TextHelper::doesContain(self::QUOTE_DESTINATION_NAME, $text)) {
             $text = TextHelper::searchAndReplace(self::QUOTE_DESTINATION_NAME, $destination->getCountryName(), $text);
         }
-        if(TextHelper::doesContain(self::QUOTE_DESTINATION_LINK, $text)) {
+        if (TextHelper::doesContain(self::QUOTE_DESTINATION_LINK, $text)) {
             $text = TextHelper::searchAndReplace(self::QUOTE_DESTINATION_LINK, $site->getUrl() . $destination->getCountryName() . '/quote/' . $quote->getId(), $text);
         }
 
