@@ -9,7 +9,6 @@ use Helper\TextHelper;
 use Repository\DestinationRepository;
 use Entity\Template;
 use Repository\SiteRepository;
-use RuntimeException;
 
 class TemplateManager
 {
@@ -23,11 +22,10 @@ class TemplateManager
      */
     public function getTemplateComputed(Template $tpl, array $data)
     {
-        $replaced = clone($tpl);
-        $replaced->setSubject($this->computeText($replaced->getSubject(), $data));
-        $replaced->setContent($this->computeText($replaced->getContent(), $data));
+        $tpl->setSubject($this->computeText($tpl->getSubject(), $data));
+        $tpl->setContent($this->computeText($tpl->getContent(), $data));
 
-        return $replaced;
+        return $tpl;
     }
 
     /**
