@@ -11,7 +11,7 @@ class TemplateManager
 
     public function __construct()
     {
-        $this->processor = Processor::getInstance();
+        $this->processor = new Processor();
     }
 
     /**

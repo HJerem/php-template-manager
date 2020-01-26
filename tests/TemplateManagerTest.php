@@ -8,6 +8,7 @@ use Faker\Factory;
 use Manager\TemplateManager;
 use PHPUnit\Framework\TestCase;
 use Repository\DestinationRepository;
+use Repository\SiteRepository;
 
 class TemplateManagerTest extends TestCase
 {
@@ -20,9 +21,11 @@ class TemplateManagerTest extends TestCase
         $faker = Factory::create();
 
         $expectedDestination = DestinationRepository::getInstance()->getById($faker->randomNumber());
-        $expectedUser = ApplicationContext::getInstance()->getCurrentUser();
+        $context = ApplicationContext::getInstance();
+        $expectedUser = $context->getCurrentUser();
+        $expectedSite = SiteRepository::getInstance()->getById($faker->randomNumber());
 
-        $quote = new Quote($faker->randomNumber(), $faker->randomNumber(), $expectedDestination->getId(), $faker->dateTime());
+        $quote = new Quote($faker->randomNumber(), $expectedSite->getId(), $expectedDestination->getId(), $faker->dateTime());
 
         $template = new Template(
             1,
@@ -30,7 +33,7 @@ class TemplateManagerTest extends TestCase
             "
 Bonjour [user:first_name],
 
-Merci d'avoir contacté un agent local pour votre voyage [quote:destination_name].
+Merci d'avoir contacté un agent local pour votre voyage [quote:destination_name] ([quote:destination_link]).
 
 Bien cordialement,
 
@@ -50,7 +53,7 @@ www.evaneos.com
         $this->assertEquals("
 Bonjour " . $expectedUser->getFirstname() . ",
 
-Merci d'avoir contacté un agent local pour votre voyage " . $expectedDestination->getCountryName() . ".
+Merci d'avoir contacté un agent local pour votre voyage " . $expectedDestination->getCountryName() . " (".$expectedSite->getUrl() . $expectedDestination->getCountryName() . '/quote/' . $quote->getId().").
 
 Bien cordialement,
 
@@ -220,5 +223,106 @@ www.evaneos.com
         $templateManager = new TemplateManager();
         $this->expectException(TypeError::class);
         $templateManager->getTemplateComputed(null, []);
+    }
+
+
+    /**
+     * Test with user lastname
+     * @test
+     */
+    public function testWithUserLastname()
+    {
+        $faker = Factory::create();
+
+        $expectedDestination = DestinationRepository::getInstance()->getById($faker->randomNumber());
+        $expectedUser = new User($faker->randomNumber(), $faker->firstName, $faker->lastName, $faker->email);
+
+        $quote = new Quote($faker->randomNumber(), $faker->randomNumber(), $expectedDestination->getId(), $faker->dateTime());
+
+        $template = new Template(
+            1,
+            'Votre voyage avec une agence locale [quote:destination_name]',
+            "
+Bonjour [user:first_name] [user:last_name],
+
+Merci d'avoir contacté un agent local pour votre voyage [quote:destination_name].
+[quote:summary]
+
+Bien cordialement,
+
+L'équipe Evaneos.com
+www.evaneos.com
+");
+        $templateManager = new TemplateManager();
+
+        $message = $templateManager->getTemplateComputed(
+            $template,
+            [
+                'quote' => $quote,
+                'user' => $expectedUser
+            ]
+        );
+
+        $this->assertEquals('Votre voyage avec une agence locale ' . $expectedDestination->getCountryName(), $message->getSubject());
+        $this->assertEquals("
+Bonjour " . $expectedUser->getFirstname() . " ".$expectedUser->getLastname().",
+
+Merci d'avoir contacté un agent local pour votre voyage " . $expectedDestination->getCountryName() . ".
+".$quote->getId()."
+
+Bien cordialement,
+
+L'équipe Evaneos.com
+www.evaneos.com
+", $message->getContent());
+    }
+
+
+    /**
+     * Test without quote
+     * @test
+     */
+    public function testWithoutQuote()
+    {
+        $faker = Factory::create();
+
+        $expectedDestination = DestinationRepository::getInstance()->getById($faker->randomNumber());
+        $expectedUser = new User($faker->randomNumber(), $faker->firstName, $faker->lastName, $faker->email);
+
+        $template = new Template(
+            1,
+            'Votre voyage avec une agence locale [quote:destination_name]',
+            "
+Bonjour [user:first_name] [user:last_name],
+
+Merci d'avoir contacté un agent local pour votre voyage [quote:destination_name].
+[quote:summary]
+
+Bien cordialement,
+
+L'équipe Evaneos.com
+www.evaneos.com
+");
+        $templateManager = new TemplateManager();
+
+        $message = $templateManager->getTemplateComputed(
+            $template,
+            [
+                'user' => $expectedUser
+            ]
+        );
+
+        $this->assertEquals('Votre voyage avec une agence locale [quote:destination_name]', $message->getSubject());
+        $this->assertEquals("
+Bonjour " . $expectedUser->getFirstname() . " ".$expectedUser->getLastname().",
+
+Merci d'avoir contacté un agent local pour votre voyage [quote:destination_name].
+[quote:summary]
+
+Bien cordialement,
+
+L'équipe Evaneos.com
+www.evaneos.com
+", $message->getContent());
     }
 }
