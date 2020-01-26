@@ -1,6 +1,6 @@
 <?php
 
-namespace Processor;
+namespace PlaceholderProcessor;
 
 use Context\ApplicationContext;
 use Entity\User;

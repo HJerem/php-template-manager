@@ -1,6 +1,6 @@
 <?php
 
-namespace Processor;
+namespace PlaceholderProcessor;
 
 use Entity\Quote;
 use Helper\TextHelper;

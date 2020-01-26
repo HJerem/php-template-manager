@@ -2,14 +2,8 @@
 
 namespace Manager;
 
-use Context\ApplicationContext;
-use Entity\Quote;
-use Entity\User;
-use Helper\TextHelper;
-use Processor\Processor;
-use Repository\DestinationRepository;
+use PlaceholderProcessor\Processor;
 use Entity\Template;
-use Repository\SiteRepository;
 
 class TemplateManager
 {
