@@ -2,12 +2,8 @@
 
 namespace PlaceholderProcessor;
 
-use Helper\SingletonTrait;
-
 class Processor
 {
-    use SingletonTrait;
-
     private array $processors = [];
 
     public function __construct()
