@@ -10,8 +10,8 @@ class UserProcessor implements ProcessorInterface
 {
     private ApplicationContext $applicationContext;
 
-    const USER_FIRSTNAME = '[user:first_name]';
-    const USER_LASTNAME = '[user:last_name]';
+    public const USER_FIRSTNAME = '[user:first_name]';
+    public const USER_LASTNAME = '[user:last_name]';
 
     public function __construct()
     {

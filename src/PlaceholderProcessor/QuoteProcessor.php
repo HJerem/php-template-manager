@@ -12,10 +12,10 @@ class QuoteProcessor implements ProcessorInterface
     private DestinationRepository $destinationRepository;
     private SiteRepository $siteRepository;
 
-    const QUOTE_SUMMARY_HTML = '[quote:summary_html]';
-    const QUOTE_SUMMARY = '[quote:summary]';
-    const QUOTE_DESTINATION_NAME = '[quote:destination_name]';
-    const QUOTE_DESTINATION_LINK = '[quote:destination_link]';
+    public const QUOTE_SUMMARY_HTML = '[quote:summary_html]';
+    public const QUOTE_SUMMARY = '[quote:summary]';
+    public const QUOTE_DESTINATION_NAME = '[quote:destination_name]';
+    public const QUOTE_DESTINATION_LINK = '[quote:destination_link]';
 
     public function __construct()
     {
@@ -38,16 +38,32 @@ class QuoteProcessor implements ProcessorInterface
         $destination = $this->destinationRepository->getById($quote->getDestinationId());
 
         if (TextHelper::doesContain(self::QUOTE_SUMMARY_HTML, $text)) {
-            $text = TextHelper::searchAndReplace(self::QUOTE_SUMMARY_HTML, $quote->getIdHtml(), $text);
+            $text = TextHelper::searchAndReplace(
+                self::QUOTE_SUMMARY_HTML,
+                $quote->getIdHtml(),
+                $text
+            );
         }
         if (TextHelper::doesContain(self::QUOTE_SUMMARY, $text)) {
-            $text = TextHelper::searchAndReplace(self::QUOTE_SUMMARY, $quote->getIdString(), $text);
+            $text = TextHelper::searchAndReplace(
+                self::QUOTE_SUMMARY,
+                $quote->getIdString(),
+                $text
+            );
         }
         if (TextHelper::doesContain(self::QUOTE_DESTINATION_NAME, $text)) {
-            $text = TextHelper::searchAndReplace(self::QUOTE_DESTINATION_NAME, $destination->getCountryName(), $text);
+            $text = TextHelper::searchAndReplace(
+                self::QUOTE_DESTINATION_NAME,
+                $destination->getCountryName(),
+                $text
+            );
         }
         if (TextHelper::doesContain(self::QUOTE_DESTINATION_LINK, $text)) {
-            $text = TextHelper::searchAndReplace(self::QUOTE_DESTINATION_LINK, $site->getUrl() . $destination->getCountryName() . '/quote/' . $quote->getId(), $text);
+            $text = TextHelper::searchAndReplace(
+                self::QUOTE_DESTINATION_LINK,
+                $site->getUrl() . $destination->getCountryName() . '/quote/' . $quote->getId(),
+                $text
+            );
         }
 
         return $text;
